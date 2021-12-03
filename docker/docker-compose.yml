@@ -1,0 +1,26 @@
+version: '3.1'
+services:
+  api:
+    image: 'pplflw-api'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_DATASOURCE_DB_NAME=${POSTGRES_DB}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+          - /tmp/postgresql:/var/lib/postgresql
+          - /tmp/postgresql/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
